@@ -12,10 +12,14 @@ FROM SYSTEM     IMPORT ADR;
 CONST
     g_szClassName = "myWindowClass";
 
+(* TODO - FSPaint procedure similar to Sketchie, but operate on x,y and use color based on the random direction? *)
+
 (* Step 4: the Window Procedure *)
 PROCEDURE ["StdCall"] WndProc(hwnd : HWND; msg : UINT; wParam : WPARAM;  lParam : LPARAM): LRESULT;
-BEGIN
+BEGIN    
     CASE msg OF
+    (* TODO invoke FSPaint on paint request *)
+    (* TODO set window parameters and store resulting window size on create? *)
     | WM_CLOSE   : DestroyWindow(hwnd);
     | WM_DESTROY : PostQuitMessage(0);
     ELSE RETURN DefWindowProc(hwnd, msg, wParam, lParam);
@@ -28,6 +32,7 @@ VAR
     hwnd      : HWND;
     Msg       : MSG;
     wc        : WNDCLASS;
+    x,y       : CARDINAL;
 
 BEGIN
      (* Step 1: Registering the Window Class *)
