@@ -4,6 +4,7 @@ MODULE chaoswindows;
 (* Documentation - /xds/Sources/Distrib/workplace/pdf/xc.pdf *)
 
 FROM WinDef     IMPORT HWND, LPARAM, LRESULT, MyInstance, UINT, WPARAM;
+FROM WinGDI     IMPORT CreateSolidBrush, RGB;
 FROM WinUser    IMPORT CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage, GetMessage, IDC_ARROW, IDI_APPLICATION,
                        LoadCursor, LoadIcon, MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, PostQuitMessage, RegisterClass, ShowWindow, SW_ENUM,
                        TranslateMessage, UpdateWindow, WM_CLOSE, WM_DESTROY, WNDCLASS, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
@@ -42,8 +43,7 @@ BEGIN
     wc.hInstance     := MyInstance();
     wc.hIcon         := LoadIcon(NIL, IDI_APPLICATION);
     wc.hCursor       := LoadCursor(NIL, IDC_ARROW);
-(* TODO can we set the background to black below? *)
-(*    wc.hbrBackground := CAST(HBRUSH, COLOR_WINDOW+1);*)
+    wc.hbrBackground := CreateSolidBrush(RGB (0, 0, 0));
     wc.lpszMenuName  := NIL;
     className        := g_szClassName;
     wc.lpszClassName := ADR(className);
