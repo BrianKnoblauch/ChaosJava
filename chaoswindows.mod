@@ -5,16 +5,15 @@ MODULE chaoswindows;
 
 FROM WinDef     IMPORT HBRUSH, HWND, LPARAM, LRESULT, MyInstance, UINT, WPARAM;
 FROM WinUser    IMPORT CreateWindowEx, CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage, GetMessage, IDC_ARROW, IDI_APPLICATION, LoadCursor,
-                       LoadIcon, MessageBox,
-                       MB_ICONEXCLAMATION, MB_OK, MSG, PostQuitMessage, RegisterClass, ShowWindow, SW_ENUM, TranslateMessage, UpdateWindow, WM_CLOSE,
-                       WM_DESTROY, WNDCLASS, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
+                       LoadIcon, MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, PostQuitMessage, RegisterClass, ShowWindow, SW_ENUM, TranslateMessage,
+                       UpdateWindow, WM_CLOSE, WM_DESTROY, WNDCLASS, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 FROM SYSTEM     IMPORT ADR;
 
 CONST
     g_szClassName = "myWindowClass";
 
 (* Step 4: the Window Procedure *)
-PROCEDURE WndProc(hwnd : HWND; msg : UINT; wParam : WPARAM;  lParam : LPARAM): LRESULT;
+PROCEDURE ["StdCall"] WndProc(hwnd : HWND; msg : UINT; wParam : WPARAM;  lParam : LPARAM): LRESULT;
 BEGIN
     CASE msg OF
     | WM_CLOSE   : DestroyWindow(hwnd);
@@ -33,7 +32,7 @@ VAR
 BEGIN
      (* Step 1: Registering the Window Class *)
 (*    wc.style         := 0; *)
-(*    wc.lpfnWndProc   := WndProc;*)
+    wc.lpfnWndProc   := WndProc;
     wc.cbClsExtra    := 0;
     wc.cbWndExtra    := 0;
     wc.hInstance     := MyInstance();
