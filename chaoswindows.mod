@@ -2,9 +2,12 @@ MODULE chaoswindows;
 
 FROM SYSTEM     IMPORT ADR;
 FROM Windows    IMPORT BeginPaint, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
-                       EndPaint, GetMessage, HWND, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor, LoadIcon, MessageBox, MB_ICONEXCLAMATION,
-                       MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, ShowWindow, SW_ENUM,  TranslateMessage, UINT,
-		       UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
+                       EndPaint, GetMessage, GetSystemMetrics, HWND, HWND_TOPMOST, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor, LoadIcon,
+                       MessageBox,
+                       MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetWindowPos, ShowWindow,
+		       SM_CXSCREEN, SM_CYSCREEN, SW_ENUM, SWP_NOZORDER, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT,
+		       WNDCLASS,
+		       WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
 CONST
     g_szClassName = "myWindowClass";
@@ -23,11 +26,12 @@ BEGIN
       (* setpixel *)
       EndPaint (hwnd, ps);
     | WM_CREATE  :
-      (* TODO maximize window *)
-      (* invoke  GetSystemMetrics,SM_CYSCREEN to maxy *)
+      (* TODO maximize window with frame, following is close but not quite right *)
+      maxy := GetSystemMetrics(SM_CYSCREEN);
       y := maxy DIV 2;
-      (* invoke  GetSystemMetrics,SM_CXSCREEN to maxx *)
+      maxx := GetSystemMetrics(SM_CXSCREEN);
       x := maxx DIV 2;
+      SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, maxx, maxy, SWP_NOZORDER);
       RETURN 0;
     | WM_CLOSE   :
       DestroyWindow(hwnd);
