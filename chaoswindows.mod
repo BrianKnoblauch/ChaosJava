@@ -4,8 +4,8 @@ FROM SYSTEM     IMPORT ADR;
 FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
                        EndPaint, GetMessage, GetSystemMetrics, HWND, HWND_TOPMOST, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor,
                        LoadIcon, MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel,
-		       SetWindowPos, ShowWindow, SM_CXSCREEN, SM_CYSCREEN, SW_ENUM, SWP_NOZORDER, TranslateMessage, UINT, UpdateWindow, WM_CLOSE,
-		       WM_CREATE, WM_DESTROY, WM_PAINT, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
+		       SetWindowPos, ShowWindow, SM_CXSCREEN, SM_CYSCREEN, SW_ENUM, SW_MAXIMIZE, SWP_NOZORDER, TranslateMessage, UINT, UpdateWindow,
+		       WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
 CONST
     g_szClassName = "myWindowClass";
@@ -40,7 +40,6 @@ BEGIN
       EndPaint(hwnd, ps);
       RETURN 0;
     | WM_CREATE  :
-      (* TODO maximize window with frame, following is close but not quite right *)
       maxy := GetSystemMetrics(SM_CYSCREEN);
       y := maxy DIV 2;
       maxx := GetSystemMetrics(SM_CXSCREEN);
@@ -89,7 +88,7 @@ BEGIN
        RETURN ;
     END;
 
-    ShowWindow(hwnd, SW_SHOWNORMAL);
+    ShowWindow(hwnd, SW_MAXIMIZE);
     UpdateWindow(hwnd);
 
     (* The Message Loop *)
