@@ -2,10 +2,10 @@ MODULE chaoswindows;
 
 FROM SYSTEM     IMPORT ADR;
 FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
-                       EndPaint, GetMessage, GetSystemMetrics, HWND, HWND_TOPMOST, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor,
-                       LoadIcon, MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel,
-		       SetWindowPos, ShowWindow, SM_CXSCREEN, SM_CYSCREEN, SW_MAXIMIZE, SWP_NOZORDER, TranslateMessage, UINT, UpdateWindow, WM_CLOSE,
-		       WM_CREATE, WM_DESTROY, WM_PAINT, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
+                       EndPaint, GetMessage, GetSystemMetrics, HWND, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor, LoadIcon, MessageBox,
+                       MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel, ShowWindow, SM_CXSCREEN,
+		       SM_CYSCREEN, SW_MAXIMIZE, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT, WNDCLASS, WPARAM,
+		       WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
 CONST
     g_szClassName = "myWindowClass";
@@ -44,7 +44,6 @@ BEGIN
       y := maxy DIV 2;
       maxx := GetSystemMetrics(SM_CXSCREEN);
       x := maxx DIV 2;
-      SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, maxx, maxy, SWP_NOZORDER);
       RETURN 0;
     | WM_CLOSE   :
       DestroyWindow(hwnd);
