@@ -2,7 +2,8 @@ MODULE chaoswindows;
 
 FROM SYSTEM     IMPORT ADR;
 FROM Windows    IMPORT BeginPaint, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
-                       EndPaint, GetMessage, GetSystemMetrics, HWND, HWND_TOPMOST, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor, LoadIcon,
+                       EndPaint, GetMessage, GetSystemMetrics, HBRUSH, HWND, HWND_TOPMOST, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor,
+                       LoadIcon,
                        MessageBox,
                        MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetWindowPos, ShowWindow,
 		       SM_CXSCREEN, SM_CYSCREEN, SW_ENUM, SWP_NOZORDER, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT,
@@ -14,17 +15,33 @@ CONST
 
 PROCEDURE ["StdCall"] WndProc(hwnd : HWND; msg : UINT; wParam : WPARAM;  lParam : LPARAM): LRESULT;
 VAR
+    brush           : HBRUSH;  
+    direction       : CARDINAL;
     ps              : PAINTSTRUCT;
     x,y, maxx, maxy : CARDINAL;
      
 BEGIN    
     CASE msg OF
     | WM_PAINT   :
-      (* TODO get random direction and select color for each *)
-      (* hBrush := Windows.CreateSolidBrush (Windows.RGB (0, 0, 255)); *)
+      (* TODO get random direction and select color for each, implement Rand250 in a module? *)      
+      CASE direction OF
+      | 0 :
+        x := (x + ((maxx - 1) DIV 2)) DIV 2;
+	y := y DIV 2;
+	brush := CreateSolidBrush(RGB(255, 0, 0));
+      | 1 :
+	x := (x + maxx) DIV 2;
+	y := (y + maxy) DIV 2;
+	brush := CreateSolidBrush(RGB(0, 255, 0));
+      | 2 :
+	x := x DIV 2;
+	y := (y + maxy) DIV 2;
+	brush := CreateSolidBrush(RGB(0, 0, 255));
+      END; (* CASE *)
       BeginPaint (hwnd, ps);      
       (* setpixel *)
       EndPaint (hwnd, ps);
+      RETURN 0;
     | WM_CREATE  :
       (* TODO maximize window with frame, following is close but not quite right *)
       maxy := GetSystemMetrics(SM_CYSCREEN);
@@ -38,7 +55,7 @@ BEGIN
     | WM_DESTROY :
       PostQuitMessage(0);
     ELSE RETURN DefWindowProc(hwnd, msg, wParam, lParam);
-    END;
+    END; (* CASE *)
     RETURN 0;    
 END WndProc; 
 
