@@ -1,21 +1,18 @@
 MODULE chaoswindows;
 
 FROM SYSTEM     IMPORT ADR;
-FROM Windows    IMPORT BeginPaint, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
-                       EndPaint, GetMessage, GetSystemMetrics, HBRUSH, HWND, HWND_TOPMOST, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor,
-                       LoadIcon,
-                       MessageBox,
-                       MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetWindowPos, ShowWindow,
-		       SM_CXSCREEN, SM_CYSCREEN, SW_ENUM, SWP_NOZORDER, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT,
-		       WNDCLASS,
-		       WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
+FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
+                       EndPaint, GetMessage, GetSystemMetrics, HWND, HWND_TOPMOST, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor,
+                       LoadIcon, MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel,
+		       SetWindowPos, ShowWindow, SM_CXSCREEN, SM_CYSCREEN, SW_ENUM, SWP_NOZORDER, TranslateMessage, UINT, UpdateWindow, WM_CLOSE,
+		       WM_CREATE, WM_DESTROY, WM_PAINT, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
 CONST
     g_szClassName = "myWindowClass";
 
 PROCEDURE ["StdCall"] WndProc(hwnd : HWND; msg : UINT; wParam : WPARAM;  lParam : LPARAM): LRESULT;
 VAR
-    brush           : HBRUSH;  
+    color           : COLORREF;  
     direction       : CARDINAL;
     ps              : PAINTSTRUCT;
     x,y, maxx, maxy : CARDINAL;
@@ -23,24 +20,24 @@ VAR
 BEGIN    
     CASE msg OF
     | WM_PAINT   :
-      (* TODO get random direction and select color for each, implement Rand250 in a module? *)      
+      (* TODO get random direction, implement Rand250 in a module? *)      
       CASE direction OF
       | 0 :
         x := (x + ((maxx - 1) DIV 2)) DIV 2;
 	y := y DIV 2;
-	brush := CreateSolidBrush(RGB(255, 0, 0));
+	color := RGB(255, 0, 0);
       | 1 :
 	x := (x + maxx) DIV 2;
 	y := (y + maxy) DIV 2;
-	brush := CreateSolidBrush(RGB(0, 255, 0));
+	color := RGB(0, 255, 0);
       | 2 :
 	x := x DIV 2;
 	y := (y + maxy) DIV 2;
-	brush := CreateSolidBrush(RGB(0, 0, 255));
+	color := RGB(0, 0, 255);
       END; (* CASE *)
-      BeginPaint (hwnd, ps);      
-      (* setpixel *)
-      EndPaint (hwnd, ps);
+      BeginPaint(hwnd, ps);      
+      SetPixel(ps.hdc, x, y, color);
+      EndPaint(hwnd, ps);
       RETURN 0;
     | WM_CREATE  :
       (* TODO maximize window with frame, following is close but not quite right *)
