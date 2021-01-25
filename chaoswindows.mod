@@ -1,12 +1,12 @@
 MODULE chaoswindows;
 
 FROM Random     IMPORT Rand, Srand;
-FROM SYSTEM     IMPORT ADR;
+FROM SYSTEM     IMPORT ADR, CAST;
 FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
                        EndPaint, GetMessage, GetSystemMetrics, HWND, IDC_ARROW, IDI_APPLICATION, InvalidateRect, LPARAM, LRESULT, LoadCursor, LoadIcon,
 		       MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel, SetTimer,
-		       ShowWindow, SM_CXSCREEN, SM_CYSCREEN, SW_MAXIMIZE, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT,
-		       WM_TIMER, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
+		       ShowWindow, SM_CXSCREEN, SM_CYSCREEN, SW_MAXIMIZE, TIMERPROC, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE,
+		       WM_DESTROY, WM_PAINT, WM_TIMER, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
 CONST
      g_szClassName = "myWindowClass";
@@ -27,7 +27,7 @@ BEGIN
       y := maxy DIV 2;
       maxx := GetSystemMetrics(SM_CXSCREEN);
       x := maxx DIV 2;
-      (* SetTimer(hwnd, 0, 1024, NIL); *)
+      SetTimer(hwnd, 0, 1024, CAST(TIMERPROC, NIL));
       RETURN 0;	  
     | WM_PAINT   :
       direction := Rand(3);
