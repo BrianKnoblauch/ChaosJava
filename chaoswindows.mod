@@ -31,7 +31,7 @@ BEGIN
       y := maxy DIV 2;
       maxx := lprect.right;
       x := maxx DIV 2;      
-      SetTimer(hwnd, 0, 1024, CAST(TIMERPROC, NIL));
+      SetTimer(hwnd, 0, 1, CAST(TIMERPROC, NIL));
       RETURN 0;	  
     | WM_PAINT   :
       direction := Rand(3);

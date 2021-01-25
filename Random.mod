@@ -1,19 +1,18 @@
 IMPLEMENTATION MODULE Random;
 
 CONST
-     increment = 1;
+     increment = 0;
      initialseed = 1;
-     modulus = 32768;
-     multiplier = 69069;
+     modulus = 262144;
+     multiplier = 16087;
      
 VAR
     seed : CARDINAL;
 
 PROCEDURE Rand(limit : CARDINAL) :CARDINAL;
 BEGIN
-    (*seed := (seed * multiplier + increment) MOD modulus; 
-    RETURN seed MOD limit;*)
-    RETURN 0;
+    seed := (seed * multiplier + increment) MOD modulus; 
+    RETURN seed MOD limit;
 END Rand;
 
 PROCEDURE Srand();
