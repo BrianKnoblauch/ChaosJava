@@ -4,8 +4,7 @@ FROM Random     IMPORT Rand, Srand;
 FROM SYSTEM     IMPORT ADR, CAST;
 FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
                        EndPaint, GetClientRect, GetMessage, HWND, IDC_ARROW, IDI_APPLICATION, InvalidateRect, LPARAM, LRESULT, LoadCursor, LoadIcon,
-                       RECT,
-		       MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel, SetTimer,
+                       RECT, MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel, SetTimer,
 		       ShowWindow, SW_MAXIMIZE, TIMERPROC, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE,
 		       WM_DESTROY, WM_PAINT, WM_TIMER, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
