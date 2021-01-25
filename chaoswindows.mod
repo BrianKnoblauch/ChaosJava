@@ -3,10 +3,10 @@ MODULE chaoswindows;
 FROM Random     IMPORT Rand, Srand;
 FROM SYSTEM     IMPORT ADR;
 FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
-                       EndPaint, GetMessage, GetSystemMetrics, HWND, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor, LoadIcon, MessageBox,
-                       MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel, ShowWindow, SM_CXSCREEN,
-		       SM_CYSCREEN, SW_MAXIMIZE, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT, WNDCLASS, WPARAM,
-		       WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
+                       EndPaint, GetMessage, GetSystemMetrics, HWND, IDC_ARROW, IDI_APPLICATION, InvalidateRect, LPARAM, LRESULT, LoadCursor, LoadIcon,
+		       MessageBox, MB_ICONEXCLAMATION, MB_OK, MSG, MyInstance, PAINTSTRUCT, PostQuitMessage, RegisterClass, RGB, SetPixel, SetTimer,
+		       ShowWindow, SM_CXSCREEN, SM_CYSCREEN, SW_MAXIMIZE, TranslateMessage, UINT, UpdateWindow, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_PAINT,
+		       WM_TIMER, WNDCLASS, WPARAM, WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
 CONST
      g_szClassName = "myWindowClass";
@@ -21,13 +21,13 @@ VAR
     ps              : PAINTSTRUCT;
      
 BEGIN
-    (* TODO - Paint will need to be called repeatedly, WM_TIMER?  Also, do we have to updateregion or can we have full access? *)
     CASE msg OF
     | WM_CREATE  :
       maxy := GetSystemMetrics(SM_CYSCREEN);
       y := maxy DIV 2;
       maxx := GetSystemMetrics(SM_CXSCREEN);
       x := maxx DIV 2;
+      (* SetTimer(hwnd, 0, 1024, NIL); *)
       RETURN 0;	  
     | WM_PAINT   :
       direction := Rand(3);
@@ -53,6 +53,9 @@ BEGIN
       DestroyWindow(hwnd);
     | WM_DESTROY :
       PostQuitMessage(0);
+    | WM_TIMER :
+      InvalidateRect(hwnd, NIL, FALSE);
+      RETURN 0;
     ELSE RETURN DefWindowProc(hwnd, msg, wParam, lParam);
     END; (* CASE *)
     RETURN 0;    
