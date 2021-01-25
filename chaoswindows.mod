@@ -37,7 +37,7 @@ BEGIN
       direction := Rand(3);
       CASE direction OF
       | 0 :
-        x := (x + ((maxx - 1) DIV 2)) DIV 2;
+        x := (x + (maxx DIV 2)) DIV 2;
 	y := y DIV 2;
 	color := RGB(255, 0, 0);
       | 1 :
