@@ -1,5 +1,6 @@
 MODULE chaoswindows;
 
+FROM Random     IMPORT Rand, Srand;
 FROM SYSTEM     IMPORT ADR;
 FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, CS_SAVEBITS,  CW_USEDEFAULT, DefWindowProc, DestroyWindow, DispatchMessage,
                        EndPaint, GetMessage, GetSystemMetrics, HWND, IDC_ARROW, IDI_APPLICATION, LPARAM, LRESULT, LoadCursor, LoadIcon, MessageBox,
@@ -8,19 +9,28 @@ FROM Windows    IMPORT BeginPaint, COLORREF, CreateSolidBrush, CreateWindowEx, C
 		       WS_EX_CLIENTEDGE, WS_OVERLAPPEDWINDOW;
 
 CONST
-    g_szClassName = "myWindowClass";
+     g_szClassName = "myWindowClass";
+
+VAR
+     x,y, maxx, maxy : CARDINAL;
 
 PROCEDURE ["StdCall"] WndProc(hwnd : HWND; msg : UINT; wParam : WPARAM;  lParam : LPARAM): LRESULT;
 VAR
     color           : COLORREF;  
     direction       : CARDINAL;
     ps              : PAINTSTRUCT;
-    x,y, maxx, maxy : CARDINAL;
      
-BEGIN    
+BEGIN
+    (* TODO - Paint will need to be called repeatedly, WM_TIMER?  Also, do we have to updateregion or can we have full access? *)
     CASE msg OF
+    | WM_CREATE  :
+      maxy := GetSystemMetrics(SM_CYSCREEN);
+      y := maxy DIV 2;
+      maxx := GetSystemMetrics(SM_CXSCREEN);
+      x := maxx DIV 2;
+      RETURN 0;	  
     | WM_PAINT   :
-      (* TODO get random direction, implement Rand250 in a module? *)      
+      direction := Rand(3);
       CASE direction OF
       | 0 :
         x := (x + ((maxx - 1) DIV 2)) DIV 2;
@@ -34,16 +44,10 @@ BEGIN
 	x := x DIV 2;
 	y := (y + maxy) DIV 2;
 	color := RGB(0, 0, 255);
-      END; (* CASE *)
+      END; (* CASE *) 
       BeginPaint(hwnd, ps);      
       SetPixel(ps.hdc, x, y, color);
       EndPaint(hwnd, ps);
-      RETURN 0;
-    | WM_CREATE  :
-      maxy := GetSystemMetrics(SM_CYSCREEN);
-      y := maxy DIV 2;
-      maxx := GetSystemMetrics(SM_CXSCREEN);
-      x := maxx DIV 2;
       RETURN 0;
     | WM_CLOSE   :
       DestroyWindow(hwnd);
@@ -58,7 +62,7 @@ VAR
     className       : ARRAY [0..14] OF CHAR;
     hwnd            : HWND;
     Msg             : MSG;
-    wc              : WNDCLASS;
+    wc              : WNDCLASS;    
 
 BEGIN
     (* Register the Window Class *)
@@ -87,6 +91,7 @@ BEGIN
        RETURN ;
     END;
 
+    Srand;    
     ShowWindow(hwnd, SW_MAXIMIZE);
     UpdateWindow(hwnd);
 

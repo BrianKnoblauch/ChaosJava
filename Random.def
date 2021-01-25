@@ -1,0 +1,7 @@
+DEFINITION MODULE Random;
+
+PROCEDURE Rand(limit :CARDINAL) : CARDINAL;
+
+PROCEDURE Srand();
+
+END Random.
